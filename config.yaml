@@ -1,0 +1,62 @@
+# Configuration for the GraFT Algorithm and Pre-processing
+
+general:
+  save_dir: '.'
+  # For FOVs >150x150, patchGraFT is recommended
+  use_patch: False
+  motion_correct: False
+  # Set whether to plot intermediary variables
+  plot_intermediary: True
+  # Level of verbose output (e.g., 0 for silent, 10 for full)
+  verbose: 10
+  # For memory-mapping large files (not yet implemented in Python version)
+  create_memmap: False
+
+algorithm:
+  # Sparsity parameter
+  lambda_sparsity: 0.7
+  # Weight for extra time-traces
+  lambda_forb: 0.2
+  # Prevents overly correlated dictionary elements
+  lambda_corr: 0.1
+  # Initial number of components per patch
+  n_dict: 15
+  # Side length of square patches in pixels
+  patch_size: 50
+  
+  # --- New Algorithm Parameters ---
+  # Weight for the previous estimate (continuity term)
+  lambda_continuity: 0.1
+  # Decay rate of the continuity parameter
+  lambda_continuity_step: 0.9
+  # Type of dictionary update to use
+  gradient_type: 'full_ls_cor'
+  # Normalize spatial maps to max one (time-traces will not be unit norm)
+  normalize_spatial: True
+  # Enforce non-negativity constraints on coefficients
+  non_negative: True
+
+correlation_kernel:
+  # Set the correlation type to "graph embedding"
+  correlation_type: 'embedding'
+  w_time: 0
+  reduce_dim: True
+
+data_processing:
+  # 1.0 = no compression.
+  time_compression: 1.0
+  
+  # Region of interest to select from the data.
+  x_select:
+    start: 150
+    end: 350
+  y_select:
+    start: 100
+    end: 300
+
+  # --- Wavelet Denoising Parameters ---
+  denoising:
+    smooth_level: 4
+    denoising_method: 'BayesShrink'
+    denoising_strategy: 'wdenoise'
+    wavelet_type: 'sym4'
